@@ -1,6 +1,6 @@
-#SikuliTool
+##SikuliTool
 
-基于[pyjnius](https://github.com/kivy/pyjnius)，实现了对Sikuli的sikulixapi.jar的一层封装。
+基于[pyjnius](https://github.com/kivy/pyjnius)，实现了对Sikuli的sikulixapi.jar的一层封装，可以在python中直接调用，方便和现有项目进行集成，灵感来自[sikuli_cpython](https://github.com/kevlened/sikuli_cpython)。
 
 > 例子1：拖动，双击对象。
 
@@ -26,3 +26,5 @@ for i in s.findAll(Pattern('doc.png').similar(0.5)):
 	i.highlight().sleep(1).hover()
 ```
 ![](http://jianbing.github.io/images/sikuli-tool/findall.gif)
+
+

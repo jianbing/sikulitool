@@ -1,102 +1,111 @@
 #! /usr/bin/env python
 # -*- coding: UTF-8 -*-
-from sikulitool import autoclass, GetSystemMetrics
+from sikulitool import autoclass
 import time
 
 
-class Region(object):
-    def __init__(self, x, y, w, h):
-        self._region = autoclass('org.sikuli.script.Region')(x, y, w, h)
+class RegionMixin(object):
+
+    def __init__(self):
+        self._wrapper = None
 
     def click(self, target=None):
         if target:
-            self._region.click(target)
+            self._wrapper.click(target)
         else:
-            self._region.click()
+            self._wrapper.click()
+        return self
 
     def hover(self, target=None):
         if target:
-            self._region.hover(target)
+            self._wrapper.hover(target)
         else:
-            self._region.hover()
+            self._wrapper.hover()
+        return self
 
     def sleep(self, secs):
         time.sleep(secs)
+        return self
 
     def doubleClick(self, target=None):
         if target:
-            self._region.doubleClick(target)
+            self._wrapper.click(target)
+            self._wrapper.doubleClick(target)
         else:
-            self._region.doubleClick()
+            self._wrapper.click()
+            self._wrapper.doubleClick()
+        return self
 
     def rightClick(self, target):
-        self._region.rightClick(target)
+        self._wrapper.rightClick(target)
+        return self
 
     def dragDrop(self, from_, to_):
-        self._region.dragDrop(from_, to_)
+        self._wrapper.dragDrop(from_, to_)
+        return self
 
     def exists(self, target, timeout=1.0):
-        if not self._region.exists(target, timeout):
+        if not self._wrapper.exists(target, timeout):
             return False
         else:
             return True
 
     def wait(self, target, timeout=1.0):
         try:
-            self._region.wait(target, timeout)
+            self._wrapper.wait(target, timeout)
         except Exception as e:
             return False
         else:
             return True
 
     def waitVanish(self, target, timeout=5.0):
-        return self._region.waitVanish(target, timeout)
+        return self._wrapper.waitVanish(target, timeout)
 
     def getLastMatch(self):
-        return Match(self._region.getLastMatch())
+        return Match(self._wrapper.getLastMatch())
 
     def find(self, target):
-        return Match(self._region.find(target))
+        return Match(self._wrapper.find(target))
 
     def findAll(self, target):
-        _iter = self._region.findAll(target)
+        _iter = self._wrapper.findAll(target)
         while _iter.hasNext():
             yield Match(_iter.next())
 
     def highlight(self):
-        self._region.highlight()
+        self._wrapper.highlight()
+        return self
 
     def type(self, astr):
-        self._region.type(astr)
+        self._wrapper.type(astr)
+        return self
 
     def pressKey(self, key):
-        self._region.keyDown(key)
-        self._region.keyUp(key)
+        self._wrapper.keyDown(key)
+        self._wrapper.keyUp(key)
+        return self
 
 
-class Match(object):
+class Region(RegionMixin):
+    def __init__(self, x, y, w, h):
+        super(Region, self).__init__()
+        self._wrapper = autoclass('org.sikuli.script.Region')(x, y, w, h)
+
+
+class Screen(RegionMixin):
+    def __init__(self):
+        super(Screen, self).__init__()
+        self._wrapper = autoclass('org.sikuli.script.Screen')()
+
+# class Screen(Region):
+#     def __init__(self):
+#         super(Screen, self).__init__(0, 0, GetSystemMetrics(0), GetSystemMetrics(1))
+
+
+class Match(RegionMixin):
     def __init__(self, match_obj):
-        self._match = match_obj
-
-    def hover(self):
-        self._match.hover()
-        return self
-
-    def click(self):
-        self._match.click()
-        return self
-
-    def highlight(self):
-        self._match.highlight()
-        return self
-
-    def sleep(self, secs):
-        time.sleep(secs)
-        return self
-
-    def type(self, astr):
-        self._match.type(astr)
-        return self
+        super(Match, self).__init__()
+        self._wrapper = match_obj
 
 
 class Pattern(object):
@@ -105,11 +114,6 @@ class Pattern(object):
 
     def similar(self, sim=0.7):
         return self._pattern.similar(sim)
-
-
-class Screen(Region):
-    def __init__(self):
-        super(Screen, self).__init__(0, 0, GetSystemMetrics(0), GetSystemMetrics(1))
 
 
 class Key(object):

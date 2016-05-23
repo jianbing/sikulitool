@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 import os
 import sys
-from win32api import GetSystemMetrics
 
 sikuli_jar = os.path.join(";" + os.path.dirname(os.path.realpath(__file__)), "sikulixapi.jar")
 

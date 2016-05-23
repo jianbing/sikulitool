@@ -9,6 +9,9 @@ class RegionMixin(object):
     def __init__(self):
         self._wrapper = None
 
+    def __getattr__(self, item):
+        return getattr(self._wrapper,item)
+
     def click(self, target=None):
         if target:
             self._wrapper.click(target)
@@ -29,15 +32,16 @@ class RegionMixin(object):
 
     def doubleClick(self, target=None):
         if target:
-            self._wrapper.click(target)
             self._wrapper.doubleClick(target)
         else:
-            self._wrapper.click()
             self._wrapper.doubleClick()
         return self
 
-    def rightClick(self, target):
-        self._wrapper.rightClick(target)
+    def rightClick(self, target=None):
+        if target:
+            self._wrapper.rightClick(target)
+        else:
+            self._wrapper.rightClick()
         return self
 
     def dragDrop(self, from_, to_):
@@ -72,12 +76,16 @@ class RegionMixin(object):
         while _iter.hasNext():
             yield Match(_iter.next())
 
-    def highlight(self):
-        self._wrapper.highlight()
+    def highlight(self, secs=1.0):
+        self._wrapper.highlight(secs)
         return self
 
     def type(self, astr):
         self._wrapper.type(astr)
+        return self
+
+    def paste(self, astr):
+        self._wrapper.paste(astr)
         return self
 
     def pressKey(self, key):
@@ -85,11 +93,35 @@ class RegionMixin(object):
         self._wrapper.keyUp(key)
         return self
 
+    def above(self, height=None):
+        if height:
+            return Region(self._wrapper.above(height))
+        else:
+            return Region(self._wrapper.above())
+
+    def below(self, height=None):
+        if height:
+            return Region(self._wrapper.below(height))
+        else:
+            return Region(self._wrapper.below())
+
+    def left(self, height=None):
+        if height:
+            return Region(self._wrapper.left(height))
+        else:
+            return Region(self._wrapper.left())
+
+    def right(self, height=None):
+        if height:
+            return Region(self._wrapper.right(height))
+        else:
+            return Region(self._wrapper.right())
+
 
 class Region(RegionMixin):
-    def __init__(self, x, y, w, h):
+    def __init__(self, *args):
         super(Region, self).__init__()
-        self._wrapper = autoclass('org.sikuli.script.Region')(x, y, w, h)
+        self._wrapper = autoclass('org.sikuli.script.Region')(*args)
 
 
 class Screen(RegionMixin):

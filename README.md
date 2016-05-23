@@ -2,6 +2,22 @@
 
 基于[pyjnius](https://github.com/kivy/pyjnius)，实现了对Sikuli的sikulixapi.jar的一层封装，可以在python中直接调用，方便和现有项目进行集成，灵感来自[sikuli_cpython](https://github.com/kevlened/sikuli_cpython)。
 
+###相关依赖
+
+- JDK
+- Cython
+- pyjnius
+
+> 环境变量需要配置JAVA_HOME
+
+![](http://jianbing.github.io/images/sikuli-tool/java_home.png)
+
+> Path里边，需要加入jvm.dll所在目录
+
+![](http://jianbing.github.io/images/sikuli-tool/path.png)
+
+###演示
+
 > 例子1：拖动，双击对象。
 
 ```python

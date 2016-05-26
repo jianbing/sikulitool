@@ -3,6 +3,13 @@
 from sikulitool import autoclass
 import time
 
+robot = autoclass('org.sikuli.script.RobotDesktop')()
+mouse = autoclass('org.sikuli.script.Mouse')
+
+
+class Settings(object):
+    MoveMouseDelay = 0.5
+
 
 class RegionMixin(object):
 
@@ -10,20 +17,24 @@ class RegionMixin(object):
         self._wrapper = None
 
     def __getattr__(self, item):
-        return getattr(self._wrapper,item)
+        return getattr(self._wrapper, item)
+
+    def __move(self, target=None):
+        if target:
+            robot.smoothMove(mouse.at(), self.find(target).getTarget(), Settings.MoveMouseDelay * 1000)
+        else:
+            robot.smoothMove(mouse.at(), self.getTarget(), Settings.MoveMouseDelay * 1000)
 
     def click(self, target=None):
+        self.__move(target)
         if target:
-            self._wrapper.click(target)
+            self._wrapper.click(self.getLastMatch().getTarget())
         else:
             self._wrapper.click()
         return self
 
     def hover(self, target=None):
-        if target:
-            self._wrapper.hover(target)
-        else:
-            self._wrapper.hover()
+        self.__move(target)
         return self
 
     def sleep(self, secs):
@@ -31,18 +42,23 @@ class RegionMixin(object):
         return self
 
     def doubleClick(self, target=None):
+        self.__move(target)
         if target:
-            self._wrapper.doubleClick(target)
+            self._wrapper.doubleClick(self.getLastMatch().getTarget())
         else:
             self._wrapper.doubleClick()
         return self
 
     def rightClick(self, target=None):
+        self.__move(target)
         if target:
-            self._wrapper.rightClick(target)
+            self._wrapper.rightClick(self.getLastMatch().getTarget())
         else:
             self._wrapper.rightClick()
         return self
+
+    def getTarget(self):
+        return self._wrapper.getTarget()
 
     def dragDrop(self, from_, to_):
         self._wrapper.dragDrop(from_, to_)
@@ -128,10 +144,6 @@ class Screen(RegionMixin):
     def __init__(self):
         super(Screen, self).__init__()
         self._wrapper = autoclass('org.sikuli.script.Screen')()
-
-# class Screen(Region):
-#     def __init__(self):
-#         super(Screen, self).__init__(0, 0, GetSystemMetrics(0), GetSystemMetrics(1))
 
 
 class Match(RegionMixin):

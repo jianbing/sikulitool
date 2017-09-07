@@ -1,8 +1,10 @@
-##SikuliTool
+## SikuliTool
 
-基于[pyjnius](https://github.com/kivy/pyjnius)，实现了对Sikuli的sikulixapi.jar的一层封装，可以在python中直接调用，方便和现有项目进行集成，灵感来自[sikuli_cpython](https://github.com/kevlened/sikuli_cpython)。
+基于[pyjnius](https://github.com/kivy/pyjnius)，实现了对Sikuli的sikulixapi.jar的一层封装，可以在CPython中直接调用，方便和现有项目进行集成，灵感来自[sikuli_cpython](https://github.com/kevlened/sikuli_cpython)。
 
-###相关依赖
+在Python3.5.2下运行通过。
+
+### 相关依赖
 
 - JDK
 - Cython

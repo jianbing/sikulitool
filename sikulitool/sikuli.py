@@ -156,6 +156,9 @@ class Pattern(object):
     def __init__(self, target):
         self._pattern = autoclass('org.sikuli.script.Pattern')(target)
 
+    def __getattr__(self, item):
+        return getattr(self._pattern, item)
+
     def similar(self, sim=0.7):
         return self._pattern.similar(sim)
 

@@ -25,7 +25,7 @@ python setup.py install
 ```
 
 JDK配置
------
+---
 > 环境变量需要配置JAVA_HOME
 
 ![](http://jianbing.github.io/images/sikuli-tool/java_home.png)
@@ -34,7 +34,8 @@ JDK配置
 
 ![](http://jianbing.github.io/images/sikuli-tool/path.png)
 
-###演示
+运行效果
+----
 
 > 例子1：拖动，双击对象。
 
